@@ -34,7 +34,7 @@ CASE_LIST := \
 ISA_AMO_build:
 	@cp ./tests/cases/ISA/ISA_AMO/* ./work
 	@find ./tests/lib/ -maxdepth 1 -type f -exec cp {} ./work/ \; 
-	@cd ./work && make -s clean && make -s all CPU_ARCH_FLAG_0=c910  ENDIAN_MODE=little-endian CASENAME=ISA_AMO FILE=ct_lsu_amo_basic_smart >& ISA_AMO_build.case.log 
+	@cd ./work && make -s clean && make -s all CPU_ARCH_FLAG_0=c910  ENDIAN_MODE=little-endian CASENAME=ISA_AMO FILE=ct_lsu_amo_basic_smart &> ISA_AMO_build.case.log 
 
 
 smoke_bus_build:
@@ -79,7 +79,7 @@ ISA_FP_build:
 ISA_IMAC_build:
 	@cp ./tests/cases/ISA/ISA_IMAC/* ./work
 	@find ./tests/lib/ -maxdepth 1 -type f -exec cp {} ./work/ \; 
-	@cd ./work && make -s clean && make -s all CPU_ARCH_FLAG_0=c910  ENDIAN_MODE=little-endian CASENAME=ISA_IMAC FILE=ct_imac_smoke >& ISA_IMAC_build.case.log 
+	@cd ./work && make -s clean && make -s all CPU_ARCH_FLAG_0=c910  ENDIAN_MODE=little-endian CASENAME=ISA_IMAC FILE=ct_imac_smoke &> ISA_IMAC_build.case.log 
 
 
 coremark_build:
@@ -87,7 +87,7 @@ coremark_build:
 	@find ./tests/lib/ -maxdepth 1 -type f -exec cp {} ./work/ \; 
 	@cp ./tests/lib/clib/* ./work
 	@cp ./tests/lib/newlib_wrap/* ./work
-	@cd ./work && make -s clean && make -s all CPU_ARCH_FLAG_0=c910  ENDIAN_MODE=little-endian CASENAME=coremark FILE=core_main >& coremark_build.case.log 
+	@cd ./work && make -s clean && make -s all CPU_ARCH_FLAG_0=c910  ENDIAN_MODE=little-endian CASENAME=coremark FILE=core_main &> coremark_build.case.log 
 
 
 hello_world_build:
@@ -95,7 +95,7 @@ hello_world_build:
 	@find ./tests/lib/ -maxdepth 1 -type f -exec cp {} ./work/ \; 
 	@cp ./tests/lib/clib/* ./work
 	@cp ./tests/lib/newlib_wrap/* ./work
-	@cd ./work && make -s clean && make -s all CPU_ARCH_FLAG_0=c910  ENDIAN_MODE=little-endian CASENAME=hello_world FILE=hello_world >& hello_world_build.case.log 
+	@cd ./work && make -s clean && make -s all CPU_ARCH_FLAG_0=c910  ENDIAN_MODE=little-endian CASENAME=hello_world FILE=hello_world &> hello_world_build.case.log 
 
 
 MMU_build:

@@ -19,5 +19,5 @@
 # echo 'Toolchain path($TOOL_EXTENSION):'
 # echo "    $TOOL_EXTENSION"
 
-export TOOL_EXTENSION=/opt/riscv/bin/
+export TOOL_EXTENSION=/opt/xuantie/bin
 
