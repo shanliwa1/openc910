@@ -13,10 +13,11 @@
 #limitations under the License.
 
 
-#!/bin/csh
+#!/bin/bash
 
-setenv TOOL_EXTENSION /tools/riscv/riscv64-elf-x86_64/bin
-echo 'Toolchain path($TOOL_EXTENSION):'
-echo "    $TOOL_EXTENSION"
+# setenv TOOL_EXTENSION /tools/riscv/riscv64-elf-x86_64/bin
+# echo 'Toolchain path($TOOL_EXTENSION):'
+# echo "    $TOOL_EXTENSION"
 
+export TOOL_EXTENSION=/opt/riscv/bin/
 
