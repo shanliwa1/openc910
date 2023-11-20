@@ -106,6 +106,7 @@ void portable_init(core_portable *p, int *argc, char *argv[])
         start_time();
         //--------------------------------------------
 	if (sizeof(ee_ptr_int) != sizeof(ee_u8 *)) {
+		printf("sizeof(ee_u8*): %d, sizeof(ee_ptr_int): %d\n", sizeof(ee_u8 *), sizeof(ee_ptr_int));
 		printf("ERROR! Please define ee_ptr_int to a type that holds a pointer!\n");
 	}
 	if (sizeof(ee_u32) != 4) {

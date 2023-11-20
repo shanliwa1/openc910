@@ -54,7 +54,7 @@ VERILATOR_FLAGS += -Os -x-assign 0
 VERILATOR_FLAGS += -lint-only
 # Warn abount lint issues; may not want this on less solid designs
 VERILATOR_FLAGS += -Wno-fatal
-VERILATOR_FLAGS += --timing
+VERILATOR_FLAGS += -fcoroutines
 # Make waveforms
 #VERILATOR_FLAGS += --trace
 ## Check SystemVerilog assertions
@@ -139,7 +139,7 @@ else
 	  @cd ./work && iverilog $(TIMESCALE) $(SIMULATOR_OPT) $(SIMULATOR_DEF) $(SIM_FILELIST) $(SIM_DUMP) $(SIMULATOR_LOG)
         else
             ifeq ($(SIM), verilator)
-	      @cd ./work && verilator --timing $(SIMULATOR_OPT) $(SIMULATOR_DEF) $(SIMULATOR_LOG) $(SIM_FILELIST) $(SIM_DUMP)
+	      @cd ./work && verilator --timing -CFLAGS -fcoroutines $(SIMULATOR_OPT) $(SIMULATOR_DEF) $(SIMULATOR_LOG) $(SIM_FILELIST) $(SIM_DUMP)
             else
 	      @echo "  [THead-smart] Please specify SIM = vcs to use VCS, or SIM = nc ,or SIM = verilator to use irun ..."
             endif
