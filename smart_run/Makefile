@@ -125,7 +125,15 @@ else
     endif
 endif
 
+workdir = ./work
 compile:
+ifneq ($(wildcard ./work/.),)
+	@echo "Found ./work."
+else
+	@echo "Did not find ./work, create it..."
+	mkdir work
+endif
+
 	@echo "  [THead-smart] Compiling smart now ... "
 	@echo "  [THead-smart] SIM = $(SIM)"
 ifeq ($(SIM), vcs)

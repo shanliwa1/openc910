@@ -16,31 +16,72 @@
 ```
 
 
-## Usage
+## Toolchain Setup 
 
-  Step1: Get Started
-
-```
-$ cd C910_RTL_FACTORY
-$ source setup/setup.csh
-$ cd ../smart_run
-$ make help
-To gain more information about how to use smart testbench.
-```
-
-  Step2: Download and install C/C++ Compiler
-
-```
-You can download the GNU tool chain compiled by T-HEAD from the url below:
+You can download the Xuantie GNU tool chain compiled by T-HEAD from the url below:
 https://occ.t-head.cn/community/download?id=3948120165480468480
 
-$ cd ./smart_run
-GNU tool chain (specific riscv version) must be installed and specified before
-compiling *.c/*.v tests of the smart environment. Please refer to the following
-setup file about how to specify it:
-    ./smart_run/setup/example_setup.csh
+Download pre-built Xuantie-900-gcc-elf-newlib-Vxxxx.tar.gz 
+
+unzip it and put it in /opt/xuantie/ directory.
+
+(1) Clone this repo:
+```
+git clone git@192.168.100.205:wangy/openc910.git
+
+git checkout verilator-sim 
 ```
 
+(2) Set environment veriables:
+
+CODE_BASE_PATH and TOOL_EXTENSION will be used in Makefile to build the RTL code and testcase code)
+
+```
+cd openc1910/C910_RTL_FACTORY
+
+source ./setup/setup.sh
+(This command will set CODE_BASE_PATH as C910_RTL_FACTORY directory)
+
+cd ../smart_run
+
+source ./setup/example_setup.sh
+(This command will set TOOL_EXTENSION as /opt/xuantie/bin)
+
+```
+
+## Verilator Simulation Step-by-Step guide
+
+
+In this step, we aussme you alreay have "Verilator", "GtkWave" and "Xuantie toolchain" intalled on your system.
+
+
+(1) Compile Verilator, execute following command under ./smart_run directory: 
+```
+make compile SIM=verilator  
+(This command only need to execute once, unless you modified CPU design files, e.g RTL code)
+```
+
+
+(2) Build Verilator 
+```
+make buildVerilator
+(This command only need to execute once, unless you modified CPU design files, e.g RTL code)
+```
+      
+
+(3) Build testcase 
+```
+make buildcase CASE=hello_world
+(This command build a C or assembly program, use CASE=xxx to select which program you want to build, you can use make help to see what XXX can be)
+```
+      
+
+(4) Run testcase on Verilator 
+```
+make runVerilator
+(This command run a application on verilator simulation CPU)
+```
+      
 
 ## Notes
 
