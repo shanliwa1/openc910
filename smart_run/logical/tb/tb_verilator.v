@@ -53,15 +53,21 @@ limitations under the License.
 `define APB_BASE_ADDR       40'hb0000000
 
 module top(
-  input wire clk
+  input wire clk,
+  input wire rst,
+  input wire i_jtag_trst_n,
+  input wire i_jtag_tms,
+  input wire i_jtag_tdi,
+  input wire i_jtag_tck,
+  output wire o_jtag_tdo
 );
-  reg jclk;
-  reg rst_b;
-  reg jrst_b;
-  reg jtap_en;
-  wire jtg_tms;
-  wire jtg_tdi;
-  wire jtg_tdo;
+   reg jclk;
+  // reg rst_b;
+  // reg jrst_b;
+  // reg jtap_en;
+  // wire jtg_tms;
+  // wire jtg_tdi;
+  // wire jtg_tdo;
   wire  pad_yy_gate_clk_en_b;
   
   static integer FILE;
@@ -71,6 +77,8 @@ module top(
   
   assign pad_yy_gate_clk_en_b = 1'b1;
   
+  wire rst_b = rst;
+
   //initial
   //begin
   //  clk =0;
@@ -100,38 +108,38 @@ module top(
     end
   end
   
-  integer rst_bCnt;
-  initial
-  begin
-    rst_bCnt = 0;
-    rst_b = 1;
-    //#100;
-    //rst_b = 0;
-    //#100;
-    //rst_b = 1;
-  end
+  // integer rst_bCnt;
+  // initial
+  // begin
+  //   rst_bCnt = 0;
+  //   rst_b = 1;
+  //   //#100;
+  //   //rst_b = 0;
+  //   //#100;
+  //   //rst_b = 1;
+  // end
 
-  always@(posedge clk) begin
-    rst_bCnt = rst_bCnt + 1;
-    if(rst_bCnt > 10 && rst_bCnt < 20) rst_b = 0;
-    else if(rst_bCnt > 20) rst_b = 1;
-  end
+  // always@(posedge clk) begin
+  //   rst_bCnt = rst_bCnt + 1;
+  //   if(rst_bCnt > 10 && rst_bCnt < 20) rst_b = 0;
+  //   else if(rst_bCnt > 20) rst_b = 1;
+  // end
   
-  integer jrstCnt;
-  initial
-  begin
-    jrst_b = 1;
-    jrstCnt = 0;
-    //#400;
-    //jrst_b = 0;
-    //#400;
-    //jrst_b = 1;
-  end
-  always@(posedge clk) begin
-    jrstCnt = jrstCnt + 1;
-    if(jrstCnt > 40 && jrstCnt < 80) jrst_b = 0;
-    else if(jrstCnt > 80) jrst_b = 1;
-  end
+  // integer jrstCnt;
+  // initial
+  // begin
+  //   jrst_b = 1;
+  //   jrstCnt = 0;
+  //   //#400;
+  //   //jrst_b = 0;
+  //   //#400;
+  //   //jrst_b = 1;
+  // end
+  // always@(posedge clk) begin
+  //   jrstCnt = jrstCnt + 1;
+  //   if(jrstCnt > 40 && jrstCnt < 80) jrst_b = 0;
+  //   else if(jrstCnt > 80) jrst_b = 1;
+  // end
  
   integer i;
   bit [31:0] mem_inst_temp [65536];
@@ -381,14 +389,14 @@ module top(
   soc x_soc(
     .i_pad_clk           ( clk                  ),
     .b_pad_gpio_porta    ( b_pad_gpio_porta     ),
-    .i_pad_jtg_trst_b    ( jrst_b               ),
-    .i_pad_jtg_tclk      ( jclk                 ),
-    .i_pad_jtg_tdi       ( jtg_tdi              ),
-    .i_pad_jtg_tms       ( jtg_tms              ),
+    .i_pad_jtg_trst_b    ( i_jtag_trst_n               ),
+    .i_pad_jtg_tclk      ( i_jtag_tck                 ),
+    .i_pad_jtg_tdi       ( i_jtag_tdi              ),
+    .i_pad_jtg_tms       ( i_jtag_tms              ),
     .i_pad_uart0_sin     ( uart0_sin            ),
-    .o_pad_jtg_tdo       ( jtg_tdo              ),
+    .o_pad_jtg_tdo       ( o_jtag_tdo              ),
     .o_pad_uart0_sout    ( uart0_sout           ),
-    .i_pad_rst_b         ( rst_b                )
+    .i_pad_rst_b         ( rst                )
   );
   
   int_mnt x_int_mnt(

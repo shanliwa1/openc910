@@ -21,7 +21,9 @@ include ./setup/env_check.mk
 ################################################################################
 SIM = iverilog
 DUMP = off
-THREADS = 4
+THREADS = 1
+
+CFLAGS = "-fcoroutines -I../../logical/tb/"
 
 # Generate C++ in executable form
 VERILATOR_FLAGS += -cc --exe
@@ -147,7 +149,7 @@ else
 	  @cd ./work && iverilog $(TIMESCALE) $(SIMULATOR_OPT) $(SIMULATOR_DEF) $(SIM_FILELIST) $(SIM_DUMP) $(SIMULATOR_LOG)
         else
             ifeq ($(SIM), verilator)
-	      @cd ./work && verilator --timing -CFLAGS -fcoroutines $(SIMULATOR_OPT) $(SIMULATOR_DEF) $(SIMULATOR_LOG) $(SIM_FILELIST) $(SIM_DUMP)
+	      @cd ./work && verilator --timing -CFLAGS ${CFLAGS}  $(SIMULATOR_OPT) $(SIMULATOR_DEF) $(SIMULATOR_LOG) $(SIM_FILELIST) $(SIM_DUMP)
             else
 	      @echo "  [THead-smart] Please specify SIM = vcs to use VCS, or SIM = nc ,or SIM = verilator to use irun ..."
             endif
@@ -198,6 +200,9 @@ cleancase:
 # Execute one case
 runVerilator:
 	@cd ./work && obj_dir/Vtop
+
+openocd:
+	@cd ./work && obj_dir/Vtop jtag_vpi_enable=1
 
 runcase:
 	@make cleanVerilator

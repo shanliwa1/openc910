@@ -14,7 +14,15 @@
 // Include model header, generated from Verilating "top.v"
 #include "Vtop.h"
 
+#include "jtagServer.h"
+
+static bool done;
+
+const int JTAG_VPI_SERVER_PORT = 5555;
+const int JTAG_VPI_USE_ONLY_LOOPBACK = true;
+
 // Legacy function required only so linking works on Cygwin and MSVC++
+
 double sc_time_stamp() { return 0; }
 
 int main(int argc, char** argv, char** env) {
@@ -55,17 +63,59 @@ int main(int argc, char** argv, char** env) {
     // "TOP" will be the hierarchical name of the module.
     const std::unique_ptr<Vtop> top{new Vtop{contextp.get(), "TOP"}};
 
+    const char *arg_jtag = Verilated::commandArgsPlusMatch("jtag_vpi_enable=");
+    VerilatorJtagServer* jtag = NULL;
+    if (arg_jtag[1]) {
+        jtag = new VerilatorJtagServer(3); /* Jtag clock is 10 period */
+        if (jtag->init_jtag_server(JTAG_VPI_SERVER_PORT, JTAG_VPI_USE_ONLY_LOOPBACK) 
+            != VerilatorJtagServer::SUCCESS) {
+        printf("Could not initialize jtag_vpi server. Ending simulation.\n");
+        exit(1);
+        }    
+    }
+
     // Set Vtop's input signals
     top->clk = 0;
+    top->rst = 0;
+    top->i_jtag_trst_n = 0;
 
     // Simulate until $finish
-    while (!contextp->gotFinish()) {
+    while (!done || !contextp->gotFinish()) {
         // Historical note, before Verilator 4.200 Verilated::gotFinish()
         // was used above in place of contextp->gotFinish().
         // Most of the contextp-> calls can use Verilated:: calls instead;
         // the Verilated:: versions simply assume there's a single context
         // being used (per thread).  It's faster and clearer to use the
         // newer contextp-> versions.
+
+        if (contextp->time() == 10) {
+            printf("Releasing reset\n");
+            top->rst = 1;
+            top->i_jtag_trst_n = 1;
+        }
+
+        // if (contextp->time() == 21) {
+        //     printf("Releasing jtag_trst_n\n");
+        //     top->i_jtag_trst_n = 1;
+        // }
+
+        if (jtag && (contextp->time() > 25)) {
+            int ret = jtag->doJTAG(contextp->time()+1, 
+                                    &top->i_jtag_tms,
+                                    &top->i_jtag_tdi,
+                                    &top->i_jtag_tck,
+                                    top->o_jtag_tdo);
+            if (ret != VerilatorJtagServer::SUCCESS) {
+                if (ret == VerilatorJtagServer::CLIENT_DISCONNECTED) {
+                    printf("Ending simulation. Reason: jtag_vpi client disconnected.\n");
+                    done = true;
+                }
+                else {
+                    printf("Ending simulation. Reason: jtag_vpi error encountered.\n");
+                    done = true;
+                }
+            }
+        }
 
         contextp->timeInc(1);  // 1 timeprecision period passes...
         // Historical note, before Verilator 4.200 a sc_time_stamp()

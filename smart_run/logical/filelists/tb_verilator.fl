@@ -19,4 +19,6 @@ limitations under the License.
 -y ../logical/tb
 ../logical/tb/tb_verilator.v
 ../logical/tb/sim_main1.cpp
+../logical/tb/jtagServer.cpp
+../logical/tb/jtag_common.c
 

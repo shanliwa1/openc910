@@ -40,10 +40,10 @@ endif
 CFLAGS = ${FLAG_MARCH} ${FLAG_ABI} 
 
 ifeq (${CASENAME}, coremark)
-  CFLAGS += -c -O3 -mtune=c910 -static -funroll-all-loops -finline-limit=500 -fgcse-sm -fno-schedule-insns --param max-rtl-if-conversion-unpredictable-cost=100 -msignedness-cmpiv -fno-code-hoisting -mno-thread-jumps1 -mno-iv-adjust-addr-cost -mno-expand-split-imm -DITERATIONS=10000
+  CFLAGS += -c -O3 -ggdb3 -mtune=c910 -static -funroll-all-loops -finline-limit=500 -fgcse-sm -fno-schedule-insns --param max-rtl-if-conversion-unpredictable-cost=100 -msignedness-cmpiv -fno-code-hoisting -mno-thread-jumps1 -mno-iv-adjust-addr-cost -mno-expand-split-imm -DITERATIONS=10000
   # CFLAGS += -c -v -funroll-all-loops -finline-limit=500 -fgcse-sm -fno-schedule-insns --param max-rtl-if-conversion-unpredictable-cost=100 -fno-code-hoisting -mno-thread-jumps1 -mno-iv-adjust-addr-cost -DITERATIONS=10000 -O3 -static -mbit-translate
 else
-  CFLAGS += -c -O2
+  CFLAGS += -c -O2 -ggdb3
 endif
 
 CFLAGS += --specs=nano.specs
@@ -72,7 +72,7 @@ HEXFLAGS	= -O srec
 ${FILE}.elf : ${OBJECTS} linker.lcf
 	${CC} ${LINKFLAGS} ${LINKLIBS} ${OBJECTS} -o $@ -lm 
 
-${FILE}.obj : ${FILE}.elf
+${FILE}.dis : ${FILE}.elf
 	${OBJDUMP} ${OBJDUMPFLAGS} $< > $@
 
 INST_HEX = ${FILE}_inst.hex
@@ -98,7 +98,7 @@ FILE_PAT = case.pat
 #--------------------------------------------------------------------
 # target setting
 .PHONY :all
-all : ${FILE}.pat ${FILE}.hex ${FILE}.elf ${FILE}.obj
+all : ${FILE}.pat ${FILE}.hex ${FILE}.elf ${FILE}.dis
 
 #---------------------------------------------------------------------
 # clean some medium code and .pat
