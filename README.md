@@ -57,31 +57,40 @@ In this step, we aussme you alreay have "Verilator", "GtkWave" and "Xuantie tool
 
 (1) Compile Verilator, execute following command under ./smart_run directory: 
 ```
-make compile SIM=verilator  
-(This command only need to execute once, unless you modified CPU design files, e.g RTL code)
+make compile SIM=verilator DUMP=on
 ```
+(This command only need to execute once, unless you modified CPU design files, e.g RTL code.
+If you want to dump vcd waveform use DUMP=on)
+
 
 
 (2) Build Verilator 
 ```
 make buildVerilator
-(This command only need to execute once, unless you modified CPU design files, e.g RTL code)
 ```
+(This command only need to execute once, unless you modified CPU design files, e.g RTL code)
+
       
 
 (3) Build testcase 
 ```
 make buildcase CASE=hello_world
-(This command build a C or assembly program, use CASE=xxx to select which program you want to build, you can use make help to see what XXX can be)
 ```
+(This command build a C or assembly program, use CASE=xxx to select which program you want to build, you can use make help to see what XXX can be)
+
       
 
 (4) Run testcase on Verilator 
 ```
 make runVerilator
-(This command run a application on verilator simulation CPU)
 ```
-      
+(This command run a application on verilator simulation CPU)
+
+
+(5) Check waveform file
+After execution, there will be a `test.vcd` file under smart_run/work directory.
+You can use gtkwave to open it. if there is test.vcd file, you need to rerun make compile
+with DUMP=on. 
 
 ## Notes
 
