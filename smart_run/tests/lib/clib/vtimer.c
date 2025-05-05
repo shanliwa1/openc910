@@ -28,9 +28,9 @@ int get_vtimer()
 void sim_end()
 {
   int *END_ADDR;
-  END_ADDR = 0xA001FF48;
+  END_ADDR = (int*)0xA001FF48;
   unsigned int END_DATA;
   // END_DATA= 0xFFF;
-  END_DATA= 0x444333222;
+  END_DATA= (int)0x444333222;
   *END_ADDR = END_DATA;
 }
