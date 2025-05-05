@@ -21,14 +21,14 @@ include ./setup/env_check.mk
 ################################################################################
 SIM = iverilog
 DUMP = off
-THREADS = 4
+THREADS = 2
 
 # Generate C++ in executable form
 VERILATOR_FLAGS += -cc --exe
 # Generate makefile dependencies (not shown as complicates the Makefile)
 #VERILATOR_FLAGS += -MMD
 # Optimize
-VERILATOR_FLAGS += -Os -x-assign 0
+#VERILATOR_FLAGS += -O0 -x-assign 0
 # lint-only
 VERILATOR_FLAGS += -lint-only
 # Warn abount lint issues; may not want this on less solid designs
@@ -49,12 +49,12 @@ VERILATOR_FLAGS += -cc --exe
 # Generate makefile dependencies (not shown as complicates the Makefile)
 #VERILATOR_FLAGS += -MMD
 # Optimize
-VERILATOR_FLAGS += -Os -x-assign 0
+#VERILATOR_FLAGS += -O0 -x-assign 0
 # lint-only
 VERILATOR_FLAGS += -lint-only
 # Warn abount lint issues; may not want this on less solid designs
 VERILATOR_FLAGS += -Wno-fatal
-VERILATOR_FLAGS += -fcoroutines
+#VERILATOR_FLAGS += -fcoroutines
 # Make waveforms
 #VERILATOR_FLAGS += --trace
 ## Check SystemVerilog assertions
@@ -106,7 +106,7 @@ else
           SIMULATOR_LOG := 
         else
             ifeq ($(SIM), verilator)
-              SIMULATOR_OPT := -Os -x-assign 0 -Wno-fatal --threads ${THREADS}
+              SIMULATOR_OPT := -O0 -x-assign 0 -Wno-fatal --threads ${THREADS}
               SIMULATOR_DEF := -cc --exe --top-module top 
               SIMULATOR_LOG := 
             else
